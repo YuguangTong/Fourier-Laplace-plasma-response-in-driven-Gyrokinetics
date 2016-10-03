@@ -1,0 +1,3 @@
+gk_apar0.py:
+	solve Gyrokinetic equation for the Fourier-Laplace solution, assuming that A_\parallel = 0. This eliminates the Alfven mode, leaving the least damped modes to be two Slow modes (propagating in opposite directions) and a nonprogagating entropy mode. 
+

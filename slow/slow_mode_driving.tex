@@ -1,0 +1,358 @@
+
+\documentclass[12pt]{article}
+%\usepackage{geometry} % see geometry.pdf on how to lay out the page. There's lots.
+%\geometry{a4paper} % or letter or a5paper or ... etc
+% \geometry{landscape} % rotated page geometry
+\usepackage{amsmath, aas_macros}
+
+% See the ``Article customise'' template for come common customisations
+
+\title{Laplace-Fourier analysis for slow mode driving}
+\author{Yuguang Tong}
+%\date{} % delete this line to display the current date
+
+%%% BEGIN DOCUMENT
+\begin{document}
+
+\maketitle
+
+\section{Setup}
+We drive slow mode in gyrokinetic system by adding $\delta B_{\parallel a}$ to Maxwell's equations. We begin with the Fourier transformed gyrokinetic equation:
+%
+\begin{equation}
+\frac{\partial g_{\mathbf{k}s}}{\partial t} + i k_\parallel v_\parallel g_{\mathbf{k}s} + \frac{q_s}{T_s} v_\parallel F_{0s} i k_\parallel\tilde{\phi} = -\frac{q_s}{T_s} F_{0s} \frac{\tilde{A}}{\partial{t}}
+\label{eq:gk_eq}
+\end{equation}
+%
+where $\tilde{\phi}$ and $\tilde{A}$ are the source terms:
+%
+\begin{eqnarray}
+\tilde{\phi} & = & j_0(k_\perp \rho_{\perp s})\phi_\mathbf{k}
+ +  \frac{J_1(k_\perp \rho_{\perp s})}{k_\perp \rho_{\perp s}}\frac{mv_\perp^2}{q_s} 
+\frac{\delta B_{\parallel\mathbf{k}}}{B_0} \\
+\tilde{A} & =& J_0\left( k_\perp \rho_{\perp s}\right) \frac{v_\parallel A_{\parallel\mathbf{k}}}{c}
+\end{eqnarray}
+%
+where $\rho_{\perp s} = v_{\perp}/\Omega_{cs}$. Note that $\phi$, $A_\parallel$ and $\delta B_\parallel$, $g_s$ are short for the Fourier components $\phi_\mathbf{k}$, $A_{\parallel \mathbf{k}}$, $\delta B_{\parallel \mathbf{k}}$ and $g_{s\mathbf{k}}$.
+
+%%
+The Poisson equation:
+\begin{equation}
+\begin{split}
+\sum_s \frac{q_s^2 n_s}{T_s} (1 - \Gamma_{0s}(\alpha_s)) & \phi_\mathbf{k} - \sum_s q_s n_s \Gamma_{1s} (\alpha_s) \left( \frac{\delta B_{\parallel \mathbf{k}}}{B_0} + \frac{\delta B_{\parallel \mathbf{k}a}}{B_0}\right)\\
+&\quad  = \sum_s q_s \int d^3 \mathbf{v} J_0(k_\perp \rho_{\perp s}) g_{\mathbf{k}s}
+\end{split}
+\end{equation}
+
+%%
+The parallel component of Ampere's law
+\begin{equation}
+\frac{ck_\perp^2}{4\pi} A_{\parallel\mathbf{k}} = \sum_s q_s \int d^3\mathbf{v} v_\parallel J_0(k_\perp \rho_{\perp s}) g_{\mathbf{k}s}
+\end{equation}
+where $\alpha_s = k_\perp^2 \rho_s^2/2$ 
+
+%%
+The perpendicular component of Ampere's law
+\begin{equation}
+\begin{split}
+\sum_s q_s n_s \Gamma_{1s}(\alpha_s) \phi_\mathbf{k} + \left( \frac{\delta B_{\parallel \mathbf{k}}}{B_0} + \frac{\delta B_{\parallel \mathbf{k}a}}{B_0}\right) \left( \frac{B_0^2}{4\pi} + \sum_s n_sT_s\Gamma_{2s}(\alpha_s)\right) = \\
+-\sum_s T_s \int d^3\mathbf{v} \frac{v_\perp^2}{v_{ts}^2}\frac{2J_1(k_\perp \rho_{\perp s})}{k_\perp \rho_{\perp s}} g_{\mathbf{k}s}
+\end{split}
+\end{equation}
+%%%% section
+
+\section{Laplace-Fourier solution with $A_\parallel=\phi = 0$}
+\label{sec:apar=phi=0}
+
+Consider antenna driving term
+\begin{equation}
+\delta B_{\parallel a} = \delta B_{\parallel 0} e^{i(\mathbf{k}_0\cdot \mathbf{r} - \omega_0 t)}
+\label{eq:driving_b}
+\end{equation}
+Its Laplace transform is
+\begin{equation}
+\delta\hat{B}_{\parallel \mathbf{k} a} = \int_0^\infty  \delta B_{\parallel \mathbf{k}_0} e^{-i\omega_0 t} e^{-pt} dt = \frac{ \delta B_{\parallel \mathbf{k}_0}}{p+i\omega_0}
+\label{eq:driving_b_LT}
+\end{equation}
+
+%%
+Performing Laplace transform to the gyrokinetic equation gives
+%
+\begin{equation}
+p\hat{g}_{\mathbf{k}s} -g_{\mathbf{k}s}(t=0) + ik_\parallel v_\parallel \hat{g}_{\mathbf{k}s} + ik_\parallel v_\parallel \frac{mv_\perp^2 F_{0s}}{T_s B_0} \frac{J_1(k_\perp \rho_\perp s)}{k_\perp \rho_{\perp s}} \frac{\delta \hat{B}_{\parallel \mathbf{k}}}{B_0} = 0
+\end{equation}
+%
+Choosing zero initial condition, i.e., $g_{\mathbf{k}s}(t=0)=0$, the distribution function is solved to be:
+%
+\begin{equation}
+\hat{g}_{\mathbf{k}s} =- \frac{ik_\parallel v_\parallel}{p + ik_\parallel v_\parallel} \frac{mv_\perp^2 F_{0s}}{T_s B_0} \frac{J_1(k_\perp \rho_{\perp s})}{k_\perp \rho_{\perp s}} \delta \hat{B}_{\parallel \mathbf{k}} 
+\label{eqn:gks}
+\end{equation}
+
+%%
+With $A_\parallel = \phi=0$, the perpendicular Ampere's law takes the form
+\begin{equation}
+\begin{split}
+ \left( \frac{\delta B_{\parallel \mathbf{k}}}{B_0} + \frac{\delta B_{\parallel \mathbf{k}a}}{B_0}\right) \left( \frac{B_0^2}{4\pi} + \sum_s n_sT_s\Gamma_{2s}(\alpha_s)\right) = \\
+ -\sum_s T_s \int d^3\mathbf{v} \frac{v_\perp^2}{v_{ts}^2}\frac{2J_1(k_\perp \rho_{\perp s})}{k_\perp \rho_{\perp s}} g_{\mathbf{k}s}
+ \end{split}
+ \label{eq:perp_ampere_1}
+\end{equation}
+
+Substitute Eq. (\ref{eqn:gks}) into the above equation and perform the integral:
+\begin{equation}
+\begin{split}
+\mathrm{RHS} = \sum_s \frac{T_s n_s}{\pi^{3/2} v_{ts}^3} \frac{\delta B_{\parallel \mathbf{k}}}{B_0} \\ 
+\quad \int 2\pi v_\perp dv_\perp \frac{4v_\perp^2}{v_{ts}^4} \frac{J_1^2(k_\perp \rho_{\perp s})}{(k_\perp \rho_{\perp s})^2} e^{-v_\perp^2/v_{ts}^2}\\
+\quad \int dv_\parallel \frac{ik_\parallel v_\parallel}{p + ik_\parallel v_\parallel}e^{-v_\parallel^2/v_{ts}^2}
+\end{split}
+\end{equation}
+%
+Using relations A.1 and A.27 in AstroGK Manual (Howes et al. 2007), the integrals are expressed in terms of Bessel functions and plasma dispersion function:
+\begin{equation}
+\mathrm{RHS} = \sum_s T_s n_s \Gamma_{2s}(\alpha_s) \left( 1+\xi_s Z(\xi_s)\right)\frac{\delta \hat{B}_{\parallel \mathbf{k}}}{B_0}
+\end{equation}
+where $\xi_s = \frac{p}{-ikv_{ts}}$ and $Z(\xi) = \frac{1}{\sqrt{\pi}} \int_{-\infty}^\infty dt \frac{e^{-t^2}}{t-\xi}$ is the Plasma Dispersion Function. 
+Equating LHS and RHS of Eq. (\ref{eq:perp_ampere_1}), we obtain that
+
+\begin{eqnarray}
+\delta \hat{B}_{\parallel \mathbf{k}} &=& \frac{ \frac{B_0^2}{4\pi} + \sum_s n_sT_s\Gamma_{2s}(\alpha_s)}{ -\frac{B_0^2}{4\pi} + \sum_s n_sT_s\Gamma_{2s}(\alpha_s) \xi_s Z(\xi_s)}\frac{ \delta B_{\parallel \mathbf{k}_0}}{p+i\omega_0} \\
+&=&\frac{ \frac{1}{\beta_i} + \sum_s \frac{T_s}{T_i}\Gamma_{1s}(\alpha_s)}{ -\frac{1}{\beta_i} + \sum_s \frac{T_s}{T_i}\Gamma_{1s}(\alpha_s) \xi_s Z(\xi_s)}\frac{ \delta B_{\parallel \mathbf{k}_0}}{p+i\omega_0}
+\end{eqnarray}
+Note that  
+%
+\begin{equation}
+D(p) = -\frac{1}{\beta_i} + \sum_s \frac{T_s}{T_i}\Gamma_{1s}(\alpha_s) \xi_s Z(\xi_s)
+\end{equation} 
+is exactly the dispersion relation, and is the same as Eq. (55) in \cite{Howes:2006a}. We know that there $D(p)=0$ has one  solution $p_1 = -i\omega_1 = - \gamma_1$ , corresponding to a non-propagating slow/ entropy mode. To obtain $\delta B_{\parallel \mathbf{k}}$, we apply the inverse Laplace transform via Bromwich integral:
+
+\begin{eqnarray}
+\delta B_{\parallel \mathbf{k}}(t) &=& \frac{1}{2\pi i} \int_{\beta - i\infty}^{\beta + i\infty} \frac{C_b e^{pt} dp}{D(p) (p-p0)} \\
+&=& \mathrm{Res}(p_1) + \mathrm{Res}(p_0)
+\end{eqnarray}
+where 
+\begin{equation}
+C_b =  \left[\frac{1}{\beta_i} + \sum_s \frac{T_s}{T_i}\Gamma_{1s}(\alpha_s)\right] \delta B_{\parallel \mathbf{k}_0}
+\end{equation}
+ is a frequency-independent term. $p0=-i\omega_0$. $\mathrm{Res}(p)$ denotes residue at simple pole $p$. 
+
+The Residues are evaluated as follows:
+%
+\begin{equation}
+\mathrm{Res}(p_0) = \frac{C_b e^{p_0t}}{D(p_0)}  = \frac{C_b e^{-i\overline{\omega}_0\overline{t}}}{D(p_0)}
+\end{equation}
+where $\overline{\omega}_ 0 = \frac{p_0}{-i k_\parallel v_A} = \frac{\omega_0}{k_\parallel v_A}$ and $\overline{t} = t k_\parallel v_A$.
+%
+And 
+\begin{eqnarray}
+\mathrm{Res}(p_1) &=& \left[ \frac{(p-p_1) C_b e^{pt}}{D(p) (p-p_0)}\right]_{p=p_1} \\
+&=& \frac{C_b e^{p_1t}}{\left[\frac{dD}{dp}\right]_{p_1} (p_1-p_0)}
+\end{eqnarray}
+
+Define
+\begin{eqnarray}
+G(p) &=& \frac{dD}{dp} (p-p_0)\\
+&=& \sum_s \Gamma_{1s} \frac{T_s}{T_i} \frac{1}{\beta_i} \sqrt{\frac{T_s}{T_i}\frac{m_s}{m_i}} \left[(1- 2\xi_s^2)Z_s - 2\xi_s\right] (\overline{\omega} - \overline{\omega}_0)
+\end{eqnarray}
+
+Hence 
+\begin{equation}
+\mathrm{Res}(p_1) = \frac{C_b e^{-i \overline{\omega}_1 \overline{t}}}{G(\overline{\omega}_1)}
+\end{equation}
+
+To summarize, parallel magnetic field fluctuation is given by
+\begin{equation}
+\delta B_{\parallel \mathbf{k}}(t) = \frac{C_b e^{-i\overline{\omega}_0\overline{t}}}{D(p_0)} +  \frac{C_b e^{-i \overline{\omega}_1\overline{t}}}{G(\overline{\omega}_1)} 
+\end{equation}
+
+\section{Laplace-Fourier solution: general case}
+We take away the constraint on $\delta A_{\mathbf{k}\parallel}$ and $\phi$. The process is the similar to the restricted case we considered in the above section. We obtain an expression for the Fourier-Laplace-transformed distribution function $\hat{g}_{\mathbf{k}s}(p)$ from the gyrokinetic equation. Substituting it into the three Maxwell's equations (Poisson, parallel and perpendicular components of Ampere's law), we obtain three equations for three independent field fluctuations, i.e., $\delta \phi$, $\delta A_\parallel$ and $\delta B_\parallel$. Doing inverse Laplace transform will give us the temporal evolution for the fields.
+
+Apply Laplace transform to Eq. (\ref{eq:gk_eq}) and set initial conditions to zero gives:
+%
+\begin{equation}
+\hat{g}_{\mathbf{k}s}= - \frac{q_sF_{0s}}{T_s} \frac{ik_\parallel v_\parallel}{p+ik_\parallel v_\parallel} \left(
+J_{0s} \hat{\phi}_{\mathbf{k}} + \frac{J_{1s}}{k_\perp \rho_{\perp s}} \frac{mv_\perp^2}{q_s} \frac{\delta \hat{B}_{\parallel \mathbf{k}}}
+{B_0} + J_{0s}\frac{p \hat{A}_{\parallel \mathbf{k}}}{ik_\parallel c}\right)
+\label{eq:lt_gk_general}
+\end{equation}
+
+Substituting Eq. (\ref{eq:lt_gk_general}) into Poisson's equation and performing integration over velocity yield
+%
+\begin{equation}
+\begin{split}
+\sum_s \frac{q_s^2 n_s}{T_s} \left[ ( 1 + \Gamma_{0s}\xi_s Z_s)\left(\hat{\phi}_{\mathbf{k}} - \frac{ip\hat{A}_{\parallel\mathbf{k}}}{k_\parallel c}\right) + (1-\Gamma_{0s}) \frac{ip\hat{A}_{\parallel\mathbf{k}}}{k_\parallel c}\right] \\
+ + \sum_s q_s n_s \Gamma_{1s}\left( \xi_s Z_s \frac{\delta \hat{B}_{\parallel \mathbf{k}}}{B_0} - \frac{\delta \hat{B}_{\parallel \mathbf{k} a}}{B_0}\right) = 0
+\end{split}
+\end{equation}
+For convenience, define the following dimensionless quantities:
+%
+\begin{eqnarray}
+A &=& \sum_s \frac{T_i}{T_s} (1 + \Gamma_{0s}\xi_s Z_s) \\
+B &=& \sum_s \frac{T_i}{T_s} (1 - \Gamma_{0s}) \\
+C &=& \sum_s \frac{q_i}{q_s} \Gamma_{1s} \xi_s Z_s \\
+D &=& \sum_s \frac{2T_s}{T_i}\Gamma_{1s} \xi_s Z_s \\
+E &=& \sum_s \frac{q_i}{q_s} \Gamma_{1s} \\
+F &=& \sum_s \frac{2T_s}{T_i} \Gamma_{1s}
+\end{eqnarray}
+%
+and
+\begin{eqnarray}
+X &=& \hat{\phi}_{\mathbf{k}} - \frac{ip\hat{A}_{\parallel \mathbf{k}}}{k_\parallel c} = \hat{\phi}_{\mathbf{k}} - \frac{\omega\hat{A}_{\parallel \mathbf{k}}}{k_\parallel c} \\
+Y &=& \frac{ip\hat{A}_{\parallel \mathbf{k}}}{k_\parallel c} = \frac{\omega\hat{A}_{\parallel \mathbf{k}}}{k_\parallel c} \\
+Z &=& \frac{T_i}{q_i} \frac{\delta \hat{B}_{\parallel \mathbf{k}}}{B_0} \\
+Z_a &=& \frac{T_i}{q_i} \frac{\delta \hat{B}_{\parallel \mathbf{k}a}}{B_0} \\
+\overline{\omega} &=& \frac{\omega}{k_\parallel v_A} = \frac{p}{-ik_\parallel v_A}
+\end{eqnarray}
+
+Assuming hydrogen plasma: $q_i = -q_e$, $n_{0i}=n_{0e}$, and using the above definition, the Poisson equation becomes:
+%
+\begin{equation}
+A X + B Y + CZ = E Z_a
+\end{equation}
+Similarly, the parallel component of the Ampere's law yields
+%
+\begin{equation}
+(A-B) X + \frac{\alpha_i}{\overline{\omega}^2} Y + (C+E) Z = 0
+\end{equation}
+The perpendicular component of the Ampere's law yields: 
+%
+\begin{equation}
+C X - E Y + \left(D-\frac{2}{\beta_i}\right) Z = \left(F + \frac{2}{\beta_i}\right) Z_a
+\end{equation}
+
+Combining the above three equations in the matrix form gives
+\begin{equation}
+\begin{pmatrix}
+A & B & C \\
+A-B & \alpha_i/\overline{\omega}^2 & C + E \\
+C & -E & D- 2/\beta_i 
+\end{pmatrix}
+\begin{pmatrix}
+ X\\
+ Y\\
+ Z
+\end{pmatrix}
+=
+\begin{pmatrix}
+EZ_a \\
+0\\
+(F + 2/\beta_i) Z_a
+\end{pmatrix}
+\label{eq:general_disp_equation}
+\end{equation}
+
+Notice that the $3\times 3$  matrix in the above expression is exactly the dispersion tensor for linear collisionless gyrokinetics with spatial homogeneity (c.f. Eq. (6.24) in AstroGK manual (Howes, 2007) and Eq. (C15) in \cite{Howes:2006a}).
+
+\section{Driving gyrokinetics with $A_\parallel = 0$}
+To simplify comparison with AstroGK simulation of linearly driving slow mode, we set $A_\parallel=0$. We choose the Poisson's equation and the perpendicular component of the Ampere's law to solve for fields:
+%
+\begin{equation}
+\begin{pmatrix}
+A & C\\
+C & D-2/\beta_i 
+\end{pmatrix}
+\begin{pmatrix}
+X \\
+Z
+\end{pmatrix}
+=
+\begin{pmatrix}
+E \\
+F + 2/\beta_i
+\end{pmatrix}
+Z_a
+\end{equation}
+
+The Fourier-Laplace transformed fields $X$ and $Z$ are obtained by multiplying the matrix inverse:
+%
+\begin{equation}
+\begin{pmatrix}
+\hat{\phi} (p)\\
+\frac{T_i}{q_i} \frac{\delta \hat{B}_{\parallel \mathbf{k}}(p)}{B_0} 
+\end{pmatrix}
+=
+\begin{pmatrix}
+X \\
+Z
+\end{pmatrix}
+=\frac{1}{\mathrm{Det}M}
+\begin{pmatrix}
+D-2/\beta_i  & -C\\
+-C & A
+\end{pmatrix}
+\begin{pmatrix}
+E \\
+F + 2/\beta_i
+\end{pmatrix}
+Z_a
+\end{equation}
+Using the same antenna driving term $\delta B_{\parallel a}$ as in Eq. (\ref{eq:driving_b}) and its Laplace transform Eq. (\ref{eq:driving_b_LT}), we obtain
+
+\begin{eqnarray}
+\begin{pmatrix}
+\phi (t)\\
+\frac{T_i}{q_i} \frac{\delta B_{\parallel \mathbf{k}}(t)}{B_0} 
+\end{pmatrix}
+&= &\nonumber \\
+ & & ILT\left[
+\frac{1}{\mathrm{Det}M}
+\begin{pmatrix}
+D-2/\beta_i  & -C\\
+-C & A
+\end{pmatrix}
+\begin{pmatrix}
+E \\
+F + 2/\beta_i
+\end{pmatrix}
+ \frac{T_i}{q_i} \frac{\delta B_{\parallel \mathbf{k}0}}{B_0}
+ \frac{1}{p-p_0}
+\right] \nonumber \\
+&=&\sum_{i=0}^n \mathrm{Res}(p_i)
+\end{eqnarray}
+where the sum is over all the simple poles $p_i$. In particular, $p_0 = -i\omega_0$ results from antenna driving. 
+
+To evaluate residues at $p_i$ for $i\neq 0$, we expand Det$M$ in Taylor series near $p_i$ in the same way as we did in Section \ref{sec:apar=phi=0}:
+%
+\begin{equation}
+\mathrm{Res}(p_i) = 
+\left[
+\frac{1}{\frac{d\mathrm{Det}M}{dp}}
+\begin{pmatrix}
+D-2/\beta_i  & -C\\
+-C & A
+\end{pmatrix}
+\begin{pmatrix}
+E \\
+F + 2/\beta_i
+\end{pmatrix}
+ \frac{T_i}{q_i} \frac{\delta B_{\parallel \mathbf{k}0}}{B_0}
+ \frac{e^{pt}}{p-p_0}
+\right]_{p=p_i}
+\end{equation}
+where 
+\begin{equation}
+\frac{d\mathrm{Det}M}{dp} = A^\prime\left(D-\frac{2}{\beta_i}\right) + 
+AD^\prime - 2CC^\prime 
+\end{equation}
+%
+$A^\prime, C^\prime, D^\prime$ are derivatives w.r.t. $p$:
+\begin{eqnarray}
+A^\prime &=&\frac{dA}{dp} = \sum_s \frac{T_i}{T_s} \Gamma_{0s}G_s \\
+C^\prime &=& \frac{dC}{dp} = \sum_s \frac{q_i}{q_s} \Gamma_{1s} G_s \\
+D^\prime &=& \frac{dD}{dp} = \sum_s \frac{2T_s}{T_i} \Gamma_{1s} G_s 
+\end{eqnarray}
+where 
+\begin{eqnarray}
+G_s &=& \frac{\left(1-2\xi_s^2\right) Z_s - 2 \xi_s}{-ik_\parallel v_{ts}} \nonumber \\
+&=& \frac{\left(1-2\xi_s^2\right) Z_s - 2 \xi_s}{-ik_\parallel v_{A}} \frac{1}{\sqrt{\beta_i}}
+\sqrt{\frac{m_s}{m_i}\frac{T_i}{T_s}}
+\end{eqnarray}
+
+
+\bibliographystyle{plain}
+\bibliography{ref}
+
+
+
+\end{document}

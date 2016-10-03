@@ -1,0 +1,103 @@
+\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+
+\title{Driven linear collisionless gyrokinetics with  $\delta B_\parallel = 0$}
+\author{Yuguang Tong}
+%\date{}							% Activate to display a given date or no date
+\begin{document}
+\newcommand{\vect}[1]{\mathbf{#1}}
+
+\maketitle
+\section{Set up}
+We start fro the Laplace-Fourier solution given in the AstroGK manual, i.e., Eq. (6.124):
+%
+\begin{equation}
+\hat{A}_{\parallel \vect{k}}(p) = \frac{-Q^2 A_{\parallel \vect{k}_0}}{\left(p^2 + Q^2 \right) (p + i\omega_0)}
+\end{equation}
+where
+%
+\begin{equation}
+Q^2(p) = \frac{\alpha_i A k_\parallel^2 v_A^2}{AB-B^2}
+\end{equation}
+and 
+%
+\begin{eqnarray}
+A &=& \sum_s \frac{T_i}{T_s} (1 + \Gamma_{0s} \xi_s Z_s) \\
+B &=& \sum_s \frac{T_i}{T_s} ( 1 - \Gamma_{0s})
+\end{eqnarray}
+$\alpha_s = k_\perp^2 \rho_s^2 / 2$ and $\xi_s = ip/kv_{ts}$
+
+$p^2 + Q^2$ is just the dispersion relation. The system with $\delta B_\parallel = 0$ has two solutions, both Alfv{\'e}n waves. We denote the two solutions $p_1 = -i\omega_1$ and $p_2 = p_1^* = -i \omega_2 = i \omega_1^*$. AstroGK manual approximates $p^2 + Q^2$ by $(p-p_1)(p-p_2)$. 
+
+\section{Inverse Laplace transform}
+We take a different path here and directly evaluate the inverse Laplace transform via Bromwich integral. 
+
+%
+\begin{eqnarray}
+A_{\parallel\vect{k}} &=& \mathrm{ILT}\left(\hat{A}_{\parallel \vect{k}}\right (p)) \\
+&=& \frac{1}{2\pi i} \int_{\beta-i\infty}^{\beta + i \infty} \frac{-Q^2 e^{pt}}{(p^2+Q^2)(p+i\omega_0)} dp \\
+&=& \mathrm{Res}(p_1) + \mathrm{Res}(p_2) + \mathrm{Res}(p = - i\omega_0) 
+\end{eqnarray}
+where $\mathrm{Res}$ denotes residue.
+
+The residue at $p_0 = - i\omega_0$ is trivially 
+%
+\begin{equation}
+\mathrm{Res}(p = - i\omega_0)  = \left[\frac{-Q^2}{p^2 + Q^2} \right]_{p=-i\omega_0}
+\end{equation}
+The residues at $p_1$ and $p_2$ are evaluated by
+%
+\begin{eqnarray}
+\mathrm{Res}(p_1)&=& \left[ (p-p_1) \frac{-Q^2 e^{pt}}{(p^2+Q^2)(p+i\omega_0)} \right]_{p=p_1} \\
+&=& \frac{-Q^2(p_1) e^{p_1t}}{\left[\frac{d (p^2+Q^2)}{dp} +  \sum_{n=2}^\infty \frac{1}{n!} \frac{d^n(p^2+Q^2)}{dp^n} (p-p_1)^n \right]_{p=p_1}(p_1 + i\omega_0)} \\
+&=& \frac{-Q^2(p_1) e^{p_1t}}{\left[\frac{d (p^2+Q^2)}{dp} \right]_{p=p_1}(p_1 + i\omega_0)} \\
+\end{eqnarray}
+and
+%
+\begin{equation}
+p_1 \leftrightarrow p_2
+\end{equation}
+
+For convenience to compare with simulation, we introduce the dimensionless frequency 
+%
+\begin{eqnarray}
+\overline{\omega} &=& \frac{\omega}{k_\parallel v_A} = \frac{p}{-i k_\parallel v_A} \\
+\overline{t} &=& k_\parallel v_A t
+\end{eqnarray}
+Therefore 
+%
+\begin{equation}
+\xi_s = \sqrt{\frac{T_i}{T_s}\frac{m_s}{m_i}} \frac{\overline{\omega}}{\sqrt{\beta_I}}
+\end{equation}
+
+The dimensionless dispersion relation takes the form:
+\begin{equation}
+\overline{\omega}^2 - \overline{Q}^2= 0
+\end{equation}
+where 
+\begin{equation}
+\overline{Q}^2 = \frac{Q^2}{-k_\parallel^2 v_A^2} =  \frac{\alpha_i A}{(A-B)B} 
+\end{equation}
+
+Hence the residue $\mathrm{Res}(p=-i\omega_0)$ becomes
+%
+\begin{equation}
+\mathrm{Res}(\overline{\omega}_0) = \frac{\overline{Q}^2(\overline{\omega}_0) e^{-i \overline{\omega}_0 \overline{t}}}{\overline{\omega}_0 ^2 - \overline{Q}^2(\overline{\omega}_0)}
+\end{equation}
+
+The residues of the other two poles are 
+\begin{equation}
+\mathrm{Res}(\overline{\omega}_j) = \frac{\overline{Q}^2(\overline{\omega}_j) e^{-i \overline{\omega}_j \overline{t}}}{(G(\overline{\omega}_j) + 2 \overline{\omega}_j)(\overline{\omega}_j  - \overline{\omega}_0)}
+\end{equation}
+where $j = 1, 2$ and 
+\begin{equation}
+G =  \frac{\alpha_i}{\sqrt{\beta_i} (A-B)^2} \sum_s \left(\frac{T_i}{T_s}\right)^{3/2} \sqrt{\frac{m_s}{m_i}} \Gamma_{0s} \left[(1-2\xi_s^2)Z_s - 2 \xi_s\right]
+\end{equation}
+
+\end{document}  
