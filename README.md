@@ -2,6 +2,7 @@
 Analytic/numeric solution of plasma response to antenna driving in gyro kinetic system. Comparison is made with simulation by AstroGK.
 
 Directory:
+
 python/
   - keeps jupyter notebooks. 
   - figures/
