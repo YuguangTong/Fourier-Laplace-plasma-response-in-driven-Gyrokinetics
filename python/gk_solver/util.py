@@ -1,6 +1,13 @@
 import numpy as np
 from scipy.special import wofz
 
+# specify format for AstroGK output *.out file
+dtype_bpar = {'names': ('f1', 't', 'f2', 'bpar2', 'f3', 'f4', 'h1', 'h2'),
+              'formats': ('S2', 'f4', 'S10', 'f4', 'S10', 'S10', 'f4', 'f4')}
+
+dtype_phi = {'names': ('f1', 't', 'f2', 'phi2', 'f3', 'f4', 'h1', 'h2'),
+              'formats': ('S2', 'f4', 'S10', 'f4', 'S10', 'S10', 'f4', 'f4')}
+
 def real_imag(val):
     """
     Return the list [real(val), imag(val)]

@@ -168,12 +168,85 @@ def det_deriv(ti_te, mi_me, bi, kperp_rhoi, w_bar):
     return res
 
 
-#---------
-# Residues
-#---------
+#------------------
+# Eigen frequencies
+#------------------
+# Frequencies of slow mode and entropy mode
+
+
+def eigenmode_finder(ti_te, mi_me, bi, kperp_rhoi):
+    """
+    find the eigenmodes of the gk system.
+    currently hard coded the initial values for beta_i << 1, Ti = Te.
+    """
+    # slow mode
+    guess_sm_1 = np.sqrt(bi) * 1.4 * (1-0.5j)
+    guess_sm_2 = np.sqrt(bi) * 1.4 * (-1-0.5j)
+    # entropy mode
+    guess_sm_3 = (-0.2 * np.log10(bi) -0.58) * 1j
+
+    f = lambda w_bar: real_imag(dispersion(ti_te, mi_me, bi, kperp_rhoi, list2complex(w_bar)))
+    wbar_arr = []
+    for guess in [guess_sm_1, guess_sm_2, guess_sm_3]:
+        res = scipy.optimize.fsolve(f, real_imag(guess))
+        wbar = list2complex(res)
+        if np.abs(wbar.real) < 1.e-10:
+            wbar = 1j * wbar.imag
+        wbar_arr += [wbar]
+    return wbar_arr
+
+#---------------------------
+# Residues - driven by upar
+#---------------------------
 # Residues of the Bromwich integral
 # Arise from inverse Laplace transform of the 
-# Fourier-Laplace solution
+# Fourier-Laplace solution. 
+# The GK system is driven by adding phase space density perturbation
+# directly on the RHS of GK equation
+
+def upar_res_i(ti_te, mi_me, bi, kperp_rhoi, 
+                wbar_0, wbar_i, tbar, turnoff=None):
+    """
+    Calculate Residue(p_i) or Residue(\overline{\omega}_i)
+    """
+    a = A(ti_te, mi_me, bi, kperp_rhoi, wbar_i)
+    c = C(ti_te, mi_me, bi, kperp_rhoi, wbar_i)
+    d = D(ti_te, mi_me, bi, kperp_rhoi, wbar_i)
+    l = L(ti_te, mi_me, bi, wbar_i)
+    m = M(ti_te, mi_me, bi, wbar_i)
+    dmdw = det_deriv(ti_te, mi_me, bi, kperp_rhoi, wbar_i)
+    
+    numer = np.array([(d - 2/bi)*l - c*m,\
+                      -c*l + a*m])
+    denom = dmdw * (wbar_i - wbar_0)
+    return numer / denom * np.exp(-1j * wbar_i * tbar)
+
+
+def upar_res_0(ti_te, mi_me, bi, kperp_rhoi, 
+                wbar_0, tbar, turnoff=None):
+    """
+    Calculate Residue(p_0) or Residue(\overline{\omega}_0)
+    """
+    a = A(ti_te, mi_me, bi, kperp_rhoi, wbar_0)
+    c = C(ti_te, mi_me, bi, kperp_rhoi, wbar_0)
+    d = D(ti_te, mi_me, bi, kperp_rhoi, wbar_0)
+    l = L(ti_te, mi_me, bi, wbar_0)
+    m = M(ti_te, mi_me, bi, wbar_0)
+    detm = dispersion(ti_te, mi_me, bi, kperp_rhoi, wbar_0)
+    
+    numer = np.array([(d - 2/bi)*l - c*m,\
+                      -c*l + a*m])
+    return numer / detm * np.exp(-1j * wbar_0 * tbar)
+
+
+
+#---------------------------
+# Residues - driven by B_par
+#---------------------------
+# Residues of the Bromwich integral
+# Arise from inverse Laplace transform of the 
+# Fourier-Laplace solution. 
+# The GK system is driven by B_par
 
 def res_i(ti_te, mi_me, bi, kperp_rhoi, wbar_0, wbar_i, tbar, turnoff=None):
     """
