@@ -1,0 +1,296 @@
+!==============================================================================
+!  Slow mode turbulence
+!  AstroGK INPUT FILE
+!
+!  Jason TenBarge
+!  2015 October 6
+!==============================================================================
+!==============================================================================
+!GENERAL PARAMETERS
+&parameters
+ beta = 0.01  !Reference Beta, not total beta:  beta=n_0 T_0 /( B^2 / (8 pi))
+/
+!==============================================================================
+! PERPENDICULAR GRID SETUP	
+&kgrids
+ grid_option='box'    !'box' or 'single'
+ nx= 64
+ ny= 64
+ x0= 5.
+ y0= 5.
+/
+!==============================================================================
+! PARALLEL GRID SETUP	
+&theta_grid
+ z0 = 1.
+ ntheta = 32
+ nperiod = 1
+/
+!==============================================================================
+! PITCH ANGLE/ENERGY GRID SETUP	
+&le_grids_knobs
+ ngauss = 16
+ negrid =16
+ nesub=14
+ nesuper=2
+ vgrid=.true.
+ vcut= 3.0  
+ test = F
+/
+!==============================================================================
+! BOUNDARY CONDITIONS: Always triply periodic (for now)
+&dist_fn_knobs
+ test = F   ! for debugging
+/
+!==============================================================================
+! ALGORITHMIC CHOICES
+&knobs
+ use_Phi  = T
+ use_Apar = T
+ use_Bpar = T
+ delt = 1.e-02          !Time step
+ nstep = 80000             !Maximum number of timesteps
+ delt_option='check_restart'  !Use 'check_restart' to get initial timestep from 
+			      ! restart file, 'default' otherwise.
+/
+&reinit_knobs
+ delt_adj = 2.         !Adjust timestep by a factor of delt_adj.
+ delt_minimum = 5.e-7  !The minimum time step is delt_minimum.
+/
+&layouts_knobs
+ layout = 'yxles'    
+ allow_accel = .false.
+/
+!==============================================================================
+! PHYSICS
+!------------------------------------------------------------------------------
+! COLLISIONS
+&collisions_knobs
+ collision_model='full'
+ conserve_moments=.true.  !Conserve momentum and energy
+ heating = .true.          !T=Calculate heating by collisions
+ resistivity=.true.
+/
+!------------------------------------------------------------------------------
+! HYPERVISCOSITY
+&hyper_knobs
+ hyper_option='none'
+/
+!------------------------------------------------------------------------------
+! NONLINEARITY
+&nonlinear_terms_knobs
+ nonlinear_mode='on'   !'on' Include nonlinear terms.
+ cfl = 0.4             !The maximum delt < cfl * min(Delta_perp/v_perp)
+/    
+!==============================================================================
+! EVOLVED SPECIES
+&species_knobs
+ nspec=          2    !Number of kinetic species evolved.
+/
+!------------------------------------------------------------------------------
+! IONS
+&species_parameters_1
+ z     = 1.0   !Charge
+ mass  = 1.0   !Mass
+ dens  = 1.0   !Density	
+ temp  = 1.0   !Temperature
+ tprim = 0.0   !-1/T (dT/drho)
+ fprim = 0.0   !-1/n (dn/drho)
+ uprim = 0.0   ! ?
+ nu    = 0.1  !collisionality parameter
+ nu_h  = 1.0
+ nexp_h= 4.0
+ adapt_hc = .false.
+ kp_hc = 4.2
+ dkp_hc = 0.2
+ gw_hc = 0.16
+ gw_frac = 0.10
+ min_nuh = 0.1
+ max_nuh = 0.1
+ u0 = 1
+ type='ion'    !'ion' Thermal ion species 
+/
+&dist_fn_species_knobs_1
+ fexp   = 0.5   ! Temporal implicitness parameter. Recommended value: 0.48
+ bakdif = 0.    ! Spatial implicitness parameter. Recommended value: 0.05
+/
+!------------------------------------------------------------------------------
+! ELECTRONS
+&species_parameters_2
+ z     = -1.0
+ mass  =  5.4466e-4
+ dens  =  1.0
+ temp  =  1.0
+ tprim =  0.0
+ fprim =  0.0
+ uprim =  0.0
+ nu    =  0.1
+ nu_h  =  1.00
+ nexp_h=  8.0
+ adapt_hc = .true.
+ kp_hc = 4.2
+ dkp_hc = 0.2
+ gw_hc = 0.16	
+ gw_frac = 0.10
+ min_nuh = 1.0
+ max_nuh = 10.0
+ u0 = 1
+ type='electron'  !'electron' Thermal electron species 
+/
+&dist_fn_species_knobs_2
+ fexp   = 0.48
+ bakdif = 0.
+/
+!==============================================================================
+! INITIAL CONDITIONS
+&init_g_knobs
+ restart_file = "nc/stampede_mix.nc"   !Base of filenames with restart data.
+ ginit_option="many"          !"many" for nl run restarts, "zero" for driven 
+! ginit_option= "zero"             
+/
+!==============================================================================
+! DRIVING SOURCES  (non-antenna sources)
+&source_knobs
+/
+&driver
+ nk_stir = 8             !Number of independent Fourier modes driven by antenna.
+ restarting=.true.
+ randomize=.false.
+ seed1=2348761
+ seed2=4934757
+/
+&stir_1
+ mode_frequency = (0.9, -0.8) !Frequency
+ mode_amplitude = 30. !Amplitude of antenna
+ drive_apar = .true. !Drive Alfven waves via A_z
+ drive_bpar = .false. !Drive slow modes via B_z
+ drive_upar = .false. !Drive slow modes via phase space perturbation
+ kx = 1
+ ky = 0
+ kz = 1
+/
+&stir_2
+ mode_frequency = (0.9, -0.8) !Frequency
+ mode_amplitude = 30. !Amplitude of antenna
+ drive_apar = .true. !Drive Alfven waves via A_z
+ drive_bpar = .false. !Drive slow modes via B_z
+ drive_upar = .false. !Drive slow modes via phase space perturbation
+ kx = 0
+ ky = 1
+ kz = 1
+/
+&stir_3
+ mode_frequency = (0.9, -0.8) !Frequency
+ mode_amplitude = 30. !Amplitude of antenna
+ drive_apar = .true. !Drive Alfven waves via A_z
+ drive_bpar = .false. !Drive slow modes via B_z
+ drive_upar = .false. !Drive slow modes via phase space perturbation
+ kx = 1
+ ky = 0
+ kz = -1
+/
+&stir_4
+ mode_frequency = (0.9, -0.8) !Frequency
+ mode_amplitude = 30. !Amplitude of antenna
+ drive_apar = .true. !Drive Alfven waves via A_z
+ drive_bpar = .false. !Drive slow modes via B_z
+ drive_upar = .false. !Drive slow modes via phase space perturbation
+ kx = 0
+ ky = 1
+ kz = -1
+/
+&stir_5
+ mode_frequency = (0.13, -0.) !Frequency
+ mode_amplitude = 475. !Amplitude of antenna
+ drive_apar = .false. !Drive Alfven waves via A_z
+ drive_bpar = .false. !Drive slow modes via B_z
+ drive_upar = .true. !Drive slow modes via phase space perturbation
+ kx = 1
+ ky = 0
+ kz = 1
+/
+&stir_6
+ mode_frequency = (0.13, -0.) !Frequency
+ mode_amplitude = 475. !Amplitude of antenna
+ drive_apar = .false. !Drive Alfven waves via A_z
+ drive_bpar = .false. !Drive slow modes via B_z
+ drive_upar = .true. !Drive slow modes via phase space perturbation
+ kx = 0
+ ky = 1
+ kz = 1
+/
+&stir_7
+ mode_frequency = (0.13, -0.) !Frequency
+ mode_amplitude = 475. !Amplitude of antenna
+ drive_apar = .false. !Drive Alfven waves via A_z
+ drive_bpar = .false. !Drive slow modes via B_z
+ drive_upar = .true. !Drive slow modes via phase space perturbation
+ kx = 1
+ ky = 0
+ kz = -1
+/
+&stir_8
+ mode_frequency = (0.13, -0.) !Frequency
+ mode_amplitude = 475. !Amplitude of antenna
+ drive_apar = .false. !Drive Alfven waves via A_z
+ drive_bpar = .false. !Drive slow modes via B_z
+ drive_upar = .true. !Drive slow modes via phase space perturbation
+ kx = 0
+ ky = 1
+ kz = -1
+/
+
+!==============================================================================
+! DIAGNOSTICS
+&memory
+ mem_account= .true.
+ mem_output_on=.false.
+ mem_debug= .false.
+/
+&diagnostics
+ print_line   = F                  ! to screen, linear run
+ write_linear = T                  ! to file, linear run
+
+ print_flux_line = F               ! to screen, nonlinear run
+ write_nonlin    = T               ! to file, nonlinear run
+                                
+ write_Epolar = T                  ! write polar kperp spectra
+ write_hrate = T                   ! write heating info
+ write_final_epar = .true.         ! write (linear) E_parallel
+                                
+ write_adapt_hc=.true.             !Adaptive Hypercollisionality diagnostics
+ write_verr= .true.                !Velocity resolution flags (Maybe?)
+
+ write_ascii = T
+ write_lorentzian = F 
+ write_kpar = T            
+			   	
+ write_omega=.false.            
+ write_omavg=.false.            
+								
+ write_g = F
+ write_final_fields=.true.      
+ write_final_moments=.false.
+				
+ nwrite=     2000
+ navg=       20                  
+
+ write_full_moments=.true.
+ nwrite_fullmom = 2000
+ 
+ write_freq = .true.                   !Instantaneous fields data written every
+                                       ! nwrite_freq steps for nk_modes.
+ nwrite_freq = 2000                     !Output fields data every nwrite_freq steps
+ nk_freq = 0                           !Output fields data for certain (kx,ky)
+                                       ! modes. nk_modes = 0 => write all modes
+                                       ! Modes for nk_freq > 0 set in mode
+                                       ! namelist.
+
+ nsave= 2000                     !Save restart file every nsave steps
+ omegatol=  -1.0e-3             
+ omegatinst = 500.0             
+
+ save_for_restart = .true.     
+/
+!==============================================================================
+!==============================================================================
