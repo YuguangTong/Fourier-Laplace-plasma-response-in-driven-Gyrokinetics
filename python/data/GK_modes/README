@@ -1,0 +1,7 @@
+Dispersion relations
+The titles are self explanatory. The relevant columns are 
+1 kpar rho_i (this values is arbitrary)
+2 kperp rho_i
+8 omega / kpar vA
+9 gamma / kpar vA
+17-22 Re(Bx), Im(Bx), …, Im(Bz)
